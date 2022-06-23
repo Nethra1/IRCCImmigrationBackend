@@ -3,7 +3,6 @@ from flask import Flask, make_response, request
 from flask_cors import CORS
 from flask_mongoengine import MongoEngine
 app = Flask(__name__)
-# bcrypt = Bcrypt(app)
 CORS(app)
 
 database_name = "API"
