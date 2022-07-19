@@ -41,7 +41,6 @@ def loginUser():
 def signupUser():
     user = request.get_json()
     print(user)
-    # pw_hash = bcrypt.generate_password_hash(user['password'])
     data = User(uname=user['uname'], password=str(user['password']))
     data.save()
     print(user)
