@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, make_response, request
+from flask import Flask, jsonify, make_response, render_template, request
 # from flask_bcrypt import Bcrypt
 from flask_cors import CORS
 from flask_mongoengine import MongoEngine
@@ -163,6 +163,20 @@ def getCandidateDetails():
 def getAllCandidates():
     data = getCandidateDetails()
     return make_response(jsonify(data), 201)
+
+@app.route("/ircc/uploadcsv", methods=['GET','POST'])
+def uploadFiles():
+    # get the uploaded file
+    uploaded_file = request.files['file']
+    if uploaded_file.filename != '':
+    # set the file path
+        uploaded_file.save("VisaData.csv")
+    # save the file
+    return make_response("", 201)
+
+@app.route("/")
+def index():
+    return render_template('index.html')
 
 if __name__ == "__main__":
     app.run()
