@@ -1,1 +1,1 @@
-gunicorn -b :6000 --access-logfile - --error-logfile - build:app
+gunicorn -b :5000 --access-logfile - --error-logfile - build:app
