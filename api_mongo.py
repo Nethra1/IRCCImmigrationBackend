@@ -151,8 +151,6 @@ def cleandata():
     for rec in data_dict:
             visadata.insert_one(rec)
     
-    #print(df.head(10))
-
     return make_response("", 201)
 
 def getCandidateDetails():
