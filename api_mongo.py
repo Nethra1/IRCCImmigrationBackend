@@ -152,8 +152,6 @@ def cleandata():
     for rec in data_dict:
             visadata.insert_one(rec)
     
-    #print(df.head(10))
-
     return make_response("", 201)
 
 def getCandidateDetails():
@@ -167,18 +165,16 @@ def getAllCandidates():
 
 @app.route("/ircc/uploadcsv", methods=['GET','POST'])
 def uploadFiles():
-      # get the uploaded file
-      uploaded_file = request.files['file']
-      if uploaded_file.filename != '':
-        #    file_path = os.path.join(app.config['UPLOAD_FOLDER'], uploaded_file.filename)
-          # set the file path
-           uploaded_file.save("VisaData.csv")
-          # save the file
-      return make_response("", 201)
+    # get the uploaded file
+    uploaded_file = request.files['file']
+    if uploaded_file.filename != '':
+    # set the file path
+        uploaded_file.save("VisaData.csv")
+    # save the file
+    return make_response("", 201)
 
-# @app.route('/')
+# @app.route("/")
 # def index():
-#      # Set The upload HTML template '\templates\index.html'
 #     return render_template('index.html')
 
 if __name__ == "__main__":
