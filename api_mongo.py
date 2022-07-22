@@ -114,23 +114,32 @@ def cleandata():
     df.rename(columns={'Visa Category': 'visa_category'}, inplace=True)
     df.rename(columns={'Status': 'status'}, inplace=True)
 
-    # generate age column
-    now = pd.Timestamp('now')
-    df['birthdate'] = pd.to_datetime(df['birth_date'])
-    df['age'] = (now - df['birthdate']
-                 ).astype('<m8[Y]').astype(str).apply(lambda x: x.replace('.0', ''))
-    # df['age']=df['age'].astype(int)
-    # print(df.shape[0])
+    df.drop(df.tail(1).index,inplace=True)
 
-    # drop duplicate records
+    #generate age column
+    now = pd.Timestamp('now')
+    df['birth_date']= pd.to_datetime(df['birth_date']);
+    df['age']= (now - df['birth_date']).astype('<m8[Y]').astype(str).apply(lambda x: x.replace('.0',''))   
+    df['age']=df['age'].astype(int)
+    #print(df.shape[0])
+
+    #convert date columns from string to date format
+    df['passport_issue_date']= pd.to_datetime(df['passport_issue_date'], format="%Y/%m/%d");
+    df['medical_date']= pd.to_datetime(df['medical_date'], format="%Y/%m/%d");
+    df['biometric_date']= pd.to_datetime(df['biometric_date'], format="%Y/%m/%d");
+    df['application_date']= pd.to_datetime(df['application_date'], format="%Y/%m/%d");
+    df['medical_update_date']= pd.to_datetime(df['medical_update_date'], format="%Y/%m/%d");
+
+    #df['passport_issue_date']= df['passport_issue_date'].dt.date;
+    
+    #drop duplicate records
     df = df.drop_duplicates()
 
     # remove data of those students who already got ppr
     df = df[df['status'] != 'PPR Received']
 
-    # fill missing values
-    df['visa_category'] = df['visa_category'].fillna(
-        'Study Visa', inplace=True)
+    #fill missing values
+    df['visa_category'].fillna('Study Visa',inplace=True)
 
     # remove unused columns
     df = df.drop('City of Birth', axis=1)
@@ -138,11 +147,11 @@ def cleandata():
     df = df.drop('Name of Spouse', axis=1)
     df = df.drop('status', axis=1)
 
-    df.drop(df.tail(1).index, inplace=True)
-
     data_dict = df.to_dict("records")
     for rec in data_dict:
-        visadata.insert_one(rec)
+            visadata.insert_one(rec)
+    
+    #print(df.head(10))
 
     return make_response("", 201)
 
