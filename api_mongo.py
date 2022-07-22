@@ -1,3 +1,4 @@
+import os
 from flask import Flask, jsonify, make_response, render_template, request
 # from flask_bcrypt import Bcrypt
 from flask_cors import CORS
@@ -157,7 +158,7 @@ def getCandidateDetails():
     data = Visadata.objects()
     return data
 
-@app.route("/ircc/alluser", methods = ["GET"])
+@app.route("/ircc/alldata", methods = ["GET"])
 def getAllCandidates():
     data = getCandidateDetails()
     return make_response(jsonify(data), 201)
