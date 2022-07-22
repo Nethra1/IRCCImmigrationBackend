@@ -133,3 +133,4 @@ wsproto==1.1.0
 WTForms==3.0.1
 XLML==0.1.2
 zipp==3.7.0
+gunicorn== 19.9.0
