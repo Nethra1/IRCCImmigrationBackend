@@ -72,7 +72,7 @@ def loginUser():
     dbuser = User.objects(uname=user['uname'],
                           password=user['password']).first()
     print(dbuser['uname'])
-    return make_response("test", 201)
+    return make_response("", 201)
     # print("success")
     # return make_response("test", 201)
 
@@ -173,9 +173,9 @@ def uploadFiles():
     # save the file
     return make_response("", 201)
 
-# @app.route("/")
-# def index():
-#     return render_template('index.html')
+@app.route("/")
+def index():
+    return render_template('index.html')
 
 if __name__ == "__main__":
     app.run()
