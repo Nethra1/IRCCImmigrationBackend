@@ -42,7 +42,6 @@ class User(database.Document):
             "password": self.password
         }
 
-
 class Visadata(DynamicDocument):
     passport_number = StringField()
     full_name = StringField()
