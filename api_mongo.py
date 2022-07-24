@@ -173,6 +173,7 @@ def uploadFiles():
     if uploaded_file.filename != '':
     # set the file path
         uploaded_file.save("VisaData.csv")
+        cleandata()
     # save the file
     return make_response("", 201)
 
