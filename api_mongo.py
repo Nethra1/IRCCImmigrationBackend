@@ -66,15 +66,18 @@ class Visadata(DynamicDocument):
 
 @app.route("/ircc/login", methods=["POST", "GET"])
 def loginUser():
-    user = request.get_json()
-    # pw_hash = bcrypt.generate_password_hash(user['password'])
-    # print(pw_hash)
-    dbuser = User.objects(uname=user['uname'],
+    try:
+        user = request.get_json()
+        # pw_hash = bcrypt.generate_password_hash(user['password'])
+        # print(pw_hash)
+        dbuser = User.objects(uname=user['uname'],
                           password=user['password']).first()
-    print(dbuser['uname'])
-    return make_response("", 201)
-    # print("success")
-    # return make_response("test", 201)
+        print(dbuser['uname'])
+        return make_response("", 201)
+        # print("success")
+        # return make_response("test", 201)
+    except:
+        return make_response("Invalid Credentials", 500)
 
 
 @app.route("/ircc/signup", methods=["POST"])
