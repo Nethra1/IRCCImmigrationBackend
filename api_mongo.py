@@ -153,7 +153,7 @@ def cleandata():
 
     data_dict = df.to_dict("records")
     for rec in data_dict:
-            visadata.insert_one(rec)
+        visadata.replace_one({'passport_number': rec['passport_number']}, rec, upsert=True)
     
     return make_response("", 201)
 
