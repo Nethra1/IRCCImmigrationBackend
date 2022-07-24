@@ -1,3 +1,4 @@
+from crypt import methods
 import os
 from flask import Flask, jsonify, make_response, render_template, request
 # from flask_bcrypt import Bcrypt
@@ -46,7 +47,7 @@ class User(database.Document):
 class Visadata(DynamicDocument):
     passport_number = StringField()
     full_name = StringField()
-    birth_date = DateTimeField()
+    birth_date = StringField()
     gender = StringField()
     citizenship = StringField()
     marital_status = StringField()
@@ -128,11 +129,11 @@ def cleandata():
     #print(df.shape[0])
 
     #convert date columns from string to date format
-    df['passport_issue_date']= pd.to_datetime(df['passport_issue_date'], format="%Y/%m/%d");
-    df['medical_date']= pd.to_datetime(df['medical_date'], format="%Y/%m/%d");
-    df['biometric_date']= pd.to_datetime(df['biometric_date'], format="%Y/%m/%d");
-    df['application_date']= pd.to_datetime(df['application_date'], format="%Y/%m/%d");
-    df['medical_update_date']= pd.to_datetime(df['medical_update_date'], format="%Y/%m/%d");
+    # df['passport_issue_date']= pd.to_datetime(df['passport_issue_date'], format="%Y/%m/%d");
+    # df['medical_date']= pd.to_datetime(df['medical_date'], format="%Y/%m/%d");
+    # df['biometric_date']= pd.to_datetime(df['biometric_date'], format="%Y/%m/%d");
+    # df['application_date']= pd.to_datetime(df['application_date'], format="%Y/%m/%d");
+    # df['medical_update_date']= pd.to_datetime(df['medical_update_date'], format="%Y/%m/%d");
 
     #df['passport_issue_date']= df['passport_issue_date'].dt.date;
     
@@ -164,6 +165,8 @@ def getCandidateDetails():
 @app.route("/ircc/alldata", methods = ["GET"])
 def getAllCandidates():
     data = getCandidateDetails()
+    for d in data:
+        print(d["medical_date"])
     return make_response(jsonify(data), 201)
 
 @app.route("/ircc/uploadcsv", methods=['GET','POST'])
@@ -176,6 +179,7 @@ def uploadFiles():
         cleandata()
     # save the file
     return make_response("", 201)
+
 
 # @app.route("/")
 # def index():
