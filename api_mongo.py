@@ -66,15 +66,18 @@ class Visadata(DynamicDocument):
 
 @app.route("/ircc/login", methods=["POST", "GET"])
 def loginUser():
-    user = request.get_json()
-    # pw_hash = bcrypt.generate_password_hash(user['password'])
-    # print(pw_hash)
-    dbuser = User.objects(uname=user['uname'],
+    try:
+        user = request.get_json()
+        # pw_hash = bcrypt.generate_password_hash(user['password'])
+        # print(pw_hash)
+        dbuser = User.objects(uname=user['uname'],
                           password=user['password']).first()
-    print(dbuser['uname'])
-    return make_response("test", 201)
-    # print("success")
-    # return make_response("test", 201)
+        print(dbuser['uname'])
+        return make_response("", 201)
+        # print("success")
+        # return make_response("test", 201)
+    except:
+        return make_response("Invalid Credentials", 500)
 
 
 @app.route("/ircc/signup", methods=["POST"])
@@ -150,7 +153,7 @@ def cleandata():
 
     data_dict = df.to_dict("records")
     for rec in data_dict:
-            visadata.insert_one(rec)
+        visadata.replace_one({'passport_number': rec['passport_number']}, rec, upsert=True)
     
     return make_response("", 201)
 
@@ -170,6 +173,7 @@ def uploadFiles():
     if uploaded_file.filename != '':
     # set the file path
         uploaded_file.save("VisaData.csv")
+        cleandata()
     # save the file
     return make_response("", 201)
 
