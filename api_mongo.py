@@ -1,5 +1,4 @@
 from crypt import methods
-import os
 from flask import Flask, jsonify, make_response, render_template, request
 from flask_cors import CORS
 from flask_mongoengine import MongoEngine
