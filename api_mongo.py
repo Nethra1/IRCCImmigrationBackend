@@ -20,7 +20,6 @@ db = client["API"]
 # collection
 visadata = db["visadata"]
 
-
 app = Flask(__name__)
 CORS(app)
 
