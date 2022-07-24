@@ -180,9 +180,6 @@ def uploadFiles():
     # save the file
     return make_response("", 201)
 
-# @app.route("/ircc/algorithm", methods=['POST'])
-# def runAlgorithm():
-
 
 # @app.route("/")
 # def index():
