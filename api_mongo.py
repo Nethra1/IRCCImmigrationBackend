@@ -203,13 +203,14 @@ def tagProfiles():
     i=0
     print("came before")
     for update_data in result:
+        i=i+1
         update_data['_id']=update_data['_id']['$oid']
-        print(update_data['_id'])
+        # print(update_data['_id'])
         # print(update_data['birth_date'])
         insert_data=Visadata.objects(_id=update_data['_id']).first()
         # print(insert_data)
         insert_data.update(**update_data)
-    
+    print(i)
     return make_response("",201)
 
 if __name__ == "__main__":
