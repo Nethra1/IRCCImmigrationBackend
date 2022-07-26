@@ -1,16 +1,20 @@
 from crypt import methods
+import json
 import os
+from bson import ObjectId
 from flask import Flask, jsonify, make_response, render_template, request
-# from flask_bcrypt import Bcrypt
 from flask_cors import CORS
 from flask_mongoengine import MongoEngine
 from mongoengine import *
+from algo import Algorithm
 
 import csv
 import pandas as pd
 import pymongo
 from pymongo import MongoClient
 from datetime import date
+
+from algo import Algorithm
 
 # Making a Connection with MongoClient
 client = MongoClient(
@@ -19,7 +23,6 @@ client = MongoClient(
 db = client["API"]
 # collection
 visadata = db["visadata"]
-
 
 app = Flask(__name__)
 CORS(app)
@@ -43,11 +46,11 @@ class User(database.Document):
             "password": self.password
         }
 
-
 class Visadata(DynamicDocument):
+    _id = ObjectIdField(default=ObjectId, primary_key=True)
     passport_number = StringField()
     full_name = StringField()
-    birth_date = StringField()
+    # birth_date = DateTimeField()
     gender = StringField()
     citizenship = StringField()
     marital_status = StringField()
@@ -63,6 +66,13 @@ class Visadata(DynamicDocument):
     medical_update_date = StringField()
     visa_categor = StringField()
     status = StringField()
+    file_submit_priority = IntField()
+    biometric_days_priority = IntField()
+    medical_updated_priority = IntField()
+    visa_applied_days = IntField()
+    biometric_days = IntField()
+    medical_days = IntField()
+    file_submit_days = IntField()
 
 
 @app.route("/ircc/login", methods=["POST", "GET"])
@@ -123,8 +133,9 @@ def cleandata():
 
     #generate age column
     now = pd.Timestamp('now')
-    df['birth_date']= pd.to_datetime(df['birth_date']);
-    df['age']= (now - df['birth_date']).astype('<m8[Y]').astype(str).apply(lambda x: x.replace('.0',''))   
+    temp_date=pd.to_datetime(df['birth_date'])
+    # df['birth_date']= pd.to_datetime(df['birth_date']);
+    df['age']= (now - temp_date).astype('<m8[Y]').astype(str).apply(lambda x: x.replace('.0',''))   
     df['age']=df['age'].astype(int)
     #print(df.shape[0])
 
@@ -151,6 +162,7 @@ def cleandata():
     df = df.drop('Country of Birth', axis=1)
     df = df.drop('Name of Spouse', axis=1)
     df = df.drop('status', axis=1)
+    df = df.drop('birth_date', axis=1)
 
     data_dict = df.to_dict("records")
     for rec in data_dict:
@@ -180,10 +192,26 @@ def uploadFiles():
     # save the file
     return make_response("", 201)
 
+@app.route("/")
+def index():
+    return render_template('index.html')
 
-# @app.route("/")
-# def index():
-#     return render_template('index.html')
+@app.route("/ircc/runalgorithm", methods=['POST'])
+def tagProfiles():
+    data= Algorithm().algo()
+    result=json.loads(data)
+    i=0
+    print("came before")
+    for update_data in result:
+        i=i+1
+        update_data['_id']=update_data['_id']['$oid']
+        # print(update_data['_id'])
+        # print(update_data['birth_date'])
+        insert_data=Visadata.objects(_id=update_data['_id']).first()
+        # print(insert_data)
+        insert_data.update(**update_data)
+    print(i)
+    return make_response("",201)
 
 if __name__ == "__main__":
     app.run()

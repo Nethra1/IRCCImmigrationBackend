@@ -1,11 +1,11 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "85215261ea46745abbffbfc415985b8e2d1b947fed70fc385b6324902e88a24c"
+            "sha256": "450b59ea83bb5cf84bd99dd1c72b3b4e72406cf0f14a7515d979de76ad79fddd"
         },
         "pipfile-spec": 6,
         "requires": {
-            "python_version": "3.8.9"
+            "python_version": "3.8"
         },
         "sources": [
             {
@@ -1194,7 +1194,6 @@
             "version": "==2.11.2"
         },
         "pymongo": {
-            "extras": [],
             "hashes": [
                 "sha256:019a4c13ef1d9accd08de70247068671b116a0383adcd684f6365219f29f41cd",
                 "sha256:07f50a3b8a3afb086089abcd9ab562fb2a27b63fd7017ca13dfe7b663c8f3762",
